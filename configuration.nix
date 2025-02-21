@@ -1,20 +1,35 @@
 { config, pkgs, ... }:
 
 {
-  imports = [
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-  ];
+  # Import hardware configuration
+  imports = [ ./hardware-configuration.nix ];
 
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.useOSProber = true;
+  # Bootloader Configuration (GRUB)
+  boot.loader.grub = {
+    enable = true;
+    device = "/dev/sda";  # Adjust this based on your setup
+    useOSProber = true;
+  };
 
-  networking.hostName = "nixos";
-  networking.networkmanager.enable = true;
+  # Filesystem Configuration
+  fileSystems."/" = {
+    device = "/dev/sda1";
+    fsType = "ext4";
+  };
 
+  fileSystems."/boot" = {
+    device = "/dev/sda2";
+    fsType = "vfat";
+  };
+
+  # Networking Configuration
+  networking = {
+    hostName = "nixos";
+    networkmanager.enable = true;
+  };
+
+  # Locale & Timezone
   time.timeZone = "Europe/Amsterdam";
-
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "nl_NL.UTF-8";
@@ -28,17 +43,22 @@
     LC_TIME = "nl_NL.UTF-8";
   };
 
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
+  # XServer (Graphical Environment)
+  services.xserver = {
+    enable = true;
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+    xkb = {
+      layout = "us";
+      variant = "";
+    };
   };
 
+  # Enable Printing
   services.printing.enable = true;
 
-  hardware.pulseaudio.enable = false;
+  # Audio Configuration (PipeWire replaces PulseAudio)
+  hardware.pulseaudio.enable = false;  # Explicitly disable PulseAudio
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -47,22 +67,23 @@
     pulse.enable = true;
   };
 
+  # User Configuration
   users.users.jip = {
     isNormalUser = true;
     description = "jip";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" ];  # Sudo and network permissions
     packages = with pkgs; [];
   };
 
-  programs.firefox.enable = true;
-  nixpkgs.config.allowUnfree = true;
-
+  # Default Installed Packages
   environment.systemPackages = with pkgs; [
     wget
     vim
+    firefox
     nginxShibboleth
   ];
 
+  # Enable Nginx with Reverse Proxy
   services.nginx = {
     enable = true;
     virtualHosts."mywebsite.com" = {
@@ -79,13 +100,18 @@
     };
   };
 
+  # Enable OpenSSH for remote access
   services.openssh.enable = true;
+
+  # Firewall Configuration (Allow SSH, HTTP, HTTPS)
   networking.firewall.allowedTCPPorts = [ 22 80 443 ];
 
+  # Enable Flakes and Nix Command
   nix = {
     package = pkgs.nixVersions.stable;
     extraOptions = "experimental-features = nix-command flakes";
   };
 
+  # System Version (DO NOT CHANGE)
   system.stateVersion = "24.11";
 }
