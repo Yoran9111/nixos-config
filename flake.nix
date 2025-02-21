@@ -3,12 +3,11 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
-    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs = { self, nixpkgs, ... }: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";  # Set architecture explicitly
+      system = "x86_64-linux";  # Adjust to your architecture if needed
       modules = [
         ./configuration.nix
         ./hardware-configuration.nix
