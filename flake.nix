@@ -1,18 +1,17 @@
 {
-  description = "NixOS configuration flake";
+  description = "My NixOS Flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }: {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";  # Set the architecture explicitly
-      modules = [
-        ./configuration.nix
-        ./hardware-configuration.nix
-      ];
+  outputs = { self, nixpkgs, ... }@inputs: {
+    nixosConfigurations = {
+      nixos = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [ ./configuration.nix ];
+      };
     };
   };
 }
