@@ -11,6 +11,17 @@
     useOSProber = true;
   };
 
+  # Filesystem Configuration
+  fileSystems."/" = {
+    device = "/dev/sda1";
+    fsType = "ext4";
+  };
+
+  fileSystems."/boot" = {
+    device = "/dev/sda2";
+    fsType = "vfat";
+  };
+
   # Networking Configuration
   networking = {
     hostName = "nixos";
