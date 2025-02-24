@@ -13,13 +13,14 @@
 
   # Filesystem Configuration
   fileSystems."/" = {
-    device = "/dev/sda1";
-    fsType = "ext4";
+    device = "/dev/sda";  # The device for the root partition
+    fsType = "btrfs";  # Set to btrfs for root filesystem
+    options = [ "discard" "compress=lzo" ];  # These options match your script
   };
 
   fileSystems."/boot" = {
-    device = "/dev/sda2";
-    fsType = "vfat";
+    device = "/dev/sda1";  # Assuming /dev/sda1 is your boot partition
+    fsType = "vfat";  # Standard vfat for boot partition
   };
 
   # Networking Configuration
