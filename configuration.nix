@@ -12,9 +12,9 @@
   };
 
   # Filesystem Configuration
-  fileSystems."/" = {
+  fileSystems."/" = lib.mkForce {
     device = "/dev/sda";  # The device for the root partition
-    fsType = "btrfs";  # Set to btrfs for root filesystem
+    fsType = "btrfs";  # Force btrfs for root filesystem
     options = [ "discard" "compress=lzo" ];  # These options match your script
   };
 
@@ -51,6 +51,7 @@
     firefox
     nginxShibboleth
   ];
+
   # Enable Nginx with Reverse Proxy
   services.nginx = {
     enable = true;
@@ -67,6 +68,7 @@
       };
     };
   };
+
   # Enable OpenSSH for remote access
   services.openssh.enable = true;
 
