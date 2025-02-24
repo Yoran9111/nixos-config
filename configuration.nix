@@ -43,39 +43,7 @@
     LC_TIME = "nl_NL.UTF-8";
   };
 
-  # XServer (Graphical Environment)
-  services.xserver = {
-    enable = true;
-    displayManager.gdm.enable = true;
-    desktopManager.gnome.enable = true;
-    xkb = {
-      layout = "us";
-      variant = "";
-    };
-  };
-
-  # Enable Printing
-  services.printing.enable = true;
-
-  # Audio Configuration (PipeWire replaces PulseAudio)
-  hardware.pulseaudio.enable = false;  # Explicitly disable PulseAudio
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-
-  # User Configuration
-  users.users.jip = {
-    isNormalUser = true;
-    description = "jip";
-    extraGroups = [ "networkmanager" "wheel" ];  # Sudo and network permissions
-    packages = with pkgs; [];
-  };
-
-  # Default Installed Packages
+  # Minimal Environment Configuration (No GUI)
   environment.systemPackages = with pkgs; [
     wget
     vim
@@ -83,28 +51,11 @@
     nginxShibboleth
   ];
 
-  # Enable Nginx with Reverse Proxy
-  services.nginx = {
-    enable = true;
-    virtualHosts."mywebsite.com" = {
-      root = "/nix/store/79dljmcihdrv2bcrgp1imms81akxh599-nginx-1.26.3/html";
-      locations."/" = {
-        proxyPass = "http://192.168.254.134:30080/";
-        extraConfig = ''
-          index index.html;
-          proxy_set_header Host $host;
-          proxy_set_header X-Real-IP $remote_addr;
-          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        '';
-      };
-    };
-  };
-
   # Enable OpenSSH for remote access
   services.openssh.enable = true;
 
-  # Firewall Configuration (Allow SSH, HTTP, HTTPS)
-  networking.firewall.allowedTCPPorts = [ 22 80 443 ];
+  # Enable Networking and firewall settings (SSH only for minimal access)
+  networking.firewall.allowedTCPPorts = [ 22 ];
 
   # Enable Flakes and Nix Command
   nix = {
