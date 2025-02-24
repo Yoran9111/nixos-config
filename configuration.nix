@@ -70,13 +70,7 @@
   services.openssh.enable = true;
 
   # Enable Networking and firewall settings (SSH only for minimal access)
-  networking.firewall.allowedTCPPorts = [ 22 ];
-
-  # Enable Flakes and Nix Command
-  nix = {
-    package = pkgs.nixVersions.stable;
-    extraOptions = "experimental-features = nix-command flakes";
-  };
+  networking.firewall.allowedTCPPorts = [ 80 443 22 ];
 
   # System Version (DO NOT CHANGE)
   system.stateVersion = "24.11";
