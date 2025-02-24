@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib ... }:
 
 {
   # Import hardware configuration
