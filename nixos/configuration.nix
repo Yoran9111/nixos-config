@@ -1,12 +1,12 @@
-{ config, pkgs, ... }: 
+{ config, pkgs, ... }:
 
 {
-  # Bootloader Configuration (GRUB)
+  # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
 
-  # Filesystem Configuration (BTRFS)
+  # Enable disk
   fileSystems."/" = {
     device = "/dev/disk/by-label/nixos";
     fsType = "btrfs";
@@ -21,18 +21,20 @@
   # Turn off mutable users so `nixos-install` does not prompt to set a password
   users.mutableUsers = false;
 
-  # Create the user "jip"
+  # Create my personal user
+  # The password should be changed later
   users.extraUsers.jip = {
-    description = "Jip";
+    description = "jip";
     isNormalUser = true;
-    initialPassword = "Jip";
-    extraGroups = [ "wheel" ];
+    initialPassword = "jip";
+    extraGroups = [
+      "wheel"
+    ];
     uid = 1000;
   };
 
-  # Enable OpenSSH for remote access
+  # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  # Enable VirtualBox guest additions (if using VirtualBox)
   virtualisation.virtualbox.guest.enable = true;
 }
