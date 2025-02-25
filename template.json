@@ -1,1 +1,48 @@
-
+{
+    "builders": [
+      {
+        "type": "virtualbox-iso",
+        "iso_url": "https://releases.nixos.org/nixos/24.11/nixos-24.11.714772.11415c7ae853/nixos-minimal-24.11.714772.11415c7ae853-x86_64-linux.iso",
+        "iso_checksum": "5ACF32EAE3F56AF655CD2B7FF1AAE91CB8749443CE03F7A7D919471711AD79B0",
+        "vm_name": "NixOps-VM",
+        "output_directory": "output-vm",
+        "disk_size": 50000,
+        "memory": 4096,
+        "cpus": 3,
+        "guest_os_type": "Linux_64",
+        "shutdown_command": "echo 'jip' | sudo -S poweroff",
+        "ssh_username": "jip",
+        "ssh_password": "jip",
+        "ssh_timeout": "1h",
+        "ssh_handshake_attempts": "10000",
+        "boot_wait": "30s",
+        "gfx_controller": "vmsvga",
+        "boot_command": [
+          "sudo su<enter><wait>",
+          "systemctl stop sshd<enter><wait>",
+          "mkfs.btrfs -L nixos /dev/sda<enter><wait15>",
+          "mount -o discard,compress=lzo LABEL=nixos /mnt<enter><wait>",
+          "nixos-generate-config --root /mnt<enter><wait>",      
+          "curl -o /mnt/etc/nixos/configuration.nix https://raw.githubusercontent.com/Yoran9111/nixos-config/main/configuration.nix<enter><wait>",
+          "nixos-install<enter><wait3m>",
+          "jip<enter><wait>",
+          "jip<enter><wait>",
+          "useradd -m jip<enter><wait3>",
+          "passwd jip<enter><wait3>",
+          "jip<enter><wait3>",
+          "jip<enter><wait3>",
+          "usermod -aG wheel jip<enter><wait3>",
+          "systemctl start sshd<enter><wait3>",
+          "systemctl enable sshd<enter><wait3>"
+        ],
+        "provisioners": [
+            {
+              "type": "shell",
+              "execute_command": "echo 'packer' | sudo -S -- sh -c '{{.Path}}'",
+              "script": "scripts/postinstall.sh"
+            }
+          ]
+      }
+    ]
+  }
+  
