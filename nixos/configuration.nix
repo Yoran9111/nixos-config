@@ -53,8 +53,7 @@
   virtualisation.virtualbox.guest.enable = true;
 
   # Set the NixOS state version
-  # Always set this NixOS option. Start with the version you are aiming for,
-  # e.g., "23.11" or "24.05". You should update this when making major system upgrades.
-  system.stateVersion = "23.11"; # <<< ADDED: Or "24.05" or your target version
+  # Always set this NixOS option. Use the version corresponding to the NixOS installation media.
+  system.stateVersion = "24.11"; # <<< UPDATED to reflect current unstable channel
 
 }
