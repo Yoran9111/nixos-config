@@ -16,6 +16,8 @@
   # Install minimal packages needed for provisioning
   environment.systemPackages = with pkgs; [
     git
+    vim
+    wget
   ];
 
   # Turn off mutable users so `nixos-install` does not prompt to set a password
@@ -23,10 +25,10 @@
 
   # Create my personal user
   # The password should be changed later
-  users.extraUsers.jip = {
-    description = "jip";
+  users.extraUsers.nixos = {
+    description = "nixos";
     isNormalUser = true;
-    initialPassword = "jip";
+    initialPassword = "nixos";
     extraGroups = [
       "wheel"
     ];
